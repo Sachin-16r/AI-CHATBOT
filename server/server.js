@@ -10,11 +10,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Initialize Gemini with official SDK
+// Initialize Gemini Client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.get("/", (req, res) => {
-  res.send("AI Chatbot Server (Gemini Powered) is running!");
+  res.send("AI Chatbot Server is running!");
 });
 
 app.post("/api/chat", async (req, res) => {
@@ -25,9 +25,8 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    // Standard base model name
+    // Recommended default model
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
     const result = await model.generateContent(message);
     const response = await result.response;
     const text = response.text();
