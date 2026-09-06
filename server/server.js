@@ -6,7 +6,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 dotenv.config();
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
@@ -25,8 +24,9 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    // 🚀 Updated to currently active Gemini model
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
+    // ✅ Updated to a currently supported model (1.5-flash-8b was retired)
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
+
     const result = await model.generateContent(message);
     const response = await result.response;
     const text = response.text();
