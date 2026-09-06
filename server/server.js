@@ -25,8 +25,8 @@ app.post("/api/chat", async (req, res) => {
       return res.status(400).json({ error: "Message is required" });
     }
 
-    // 🚀 Updated model name to gemini-2.5-flash
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    // 🚀 Updated to currently active Gemini model
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
     const result = await model.generateContent(message);
     const response = await result.response;
     const text = response.text();
