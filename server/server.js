@@ -14,20 +14,26 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Root Route (Render URL चेक करने के लिए)
+app.get("/", (req, res) => {
+  res.send("AI Chatbot Server is running live on Render!");
+});
+
 app.post("/api/chat", async (req, res) => {
   try {
     const { message } = req.body;
 
-    const response = await openai.responses.create({
-      model: "gpt-5.6-luna",
-      input: message,
+    // Correct OpenAI Chat Completion Call
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini", // Valid and fast OpenAI model
+      messages: [{ role: "user", content: message }],
     });
 
     res.json({
-      reply: response.output_text,
+      reply: response.choices[0].message.content,
     });
   } catch (error) {
-    console.error(error);
+    console.error("OpenAI API Error:", error);
 
     res.status(500).json({
       error: "Something went wrong",
@@ -35,6 +41,8 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log("Server running on http://localhost:5000");
+// Dynamic Port for Render Deployment
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
